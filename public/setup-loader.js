@@ -7,3 +7,10 @@ export async function loadEventSetup(fetcher=fetch,{timeoutMs=4000}={}){
  async function request(url){const controller=new AbortController();let timer;try{return await Promise.race([(async()=>{const res=await fetcher(url,{cache:'no-store',signal:controller.signal});if(res.status===404)return null;if(!res.ok)throw Error('Event setup unavailable');const raw=await res.json();return {...gameSettings(raw),configured:raw.configured===true};})(),new Promise((_,reject)=>{timer=setTimeout(()=>{controller.abort();reject(Error('Event setup timed out'));},timeoutMs);})]);}finally{clearTimeout(timer);}}
  try{return await request('api/event')||await request('game-settings.json');}catch{return null;}
 }
+
+export async function registerNamedTeam(teamName,attemptId,registrationToken,fetcher=fetch){
+ const res=await fetcher('api/event',{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({teamName,attemptId,registrationToken}),signal:AbortSignal.timeout(20000)});
+ const data=await res.json();if(!res.ok)throw Error(data.error||'Team registration unavailable; retry shortly');
+ if(!/^QMS-[A-F0-9]{16}$/.test(data.teamId||'')||typeof data.teamName!=='string'||!['d','g'].includes(data.batchId))throw Error('Invalid event team registration');
+ return data;
+}

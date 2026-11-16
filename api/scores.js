@@ -5,6 +5,6 @@ export default async function handler(req,res){res.setHeader('Cache-Control','no
  if(req.method!=='POST'){res.setHeader('Allow','GET, POST');return res.status(405).json({error:'Method not allowed'});}
  if(Number(req.headers['content-length'])>12000)return res.status(413).json({error:'Result too large'});
  let record;try{const body=typeof req.body==='string'?JSON.parse(req.body):req.body;if(JSON.stringify(body).length>12000)throw Error();record=normalise(body);}catch{return res.status(400).json({error:'Invalid result. Five valid mission records are required.'});}
- if(!authenticate(c,record.teamId,req.headers['x-team-code']))return res.status(403).json({error:'Team ID or event team code is incorrect'});
+ if(!(req.headers['x-registration-token']?await store.authorise(record,req.headers['x-registration-token']):authenticate(c,record.teamId,req.headers['x-team-code'])))return res.status(403).json({error:'This phone does not hold the registration key for this team'});
  if(record.batchId!==c.batchId)return res.status(409).json({error:'This result uses a different question batch from the event. Contact the organiser.'});const result=await store.write(record);expires=0;return res.status(200).json(result);
  }catch(e){return res.status(e.status||503).json({error:e.status===409?e.message:'Scoring service is currently unavailable or busy. Your result stays saved on this phone.'});}}
