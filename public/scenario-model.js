@@ -20,5 +20,5 @@ export function questionScenario(spec){
 export function assemblyFit(assembly,orientation='mirrored'){if(orientation==='normal')return 'fits';return assembly.keyed?'blocked':assembly.forced?'force-risk':'wrong-fit';}
 export function assemblyFitPose(seconds,fitState){const end=['blocked','force-risk'].includes(fitState)?48:12,t=Math.max(0,seconds)%4,ease=x=>x*x*(3-2*x),p=t<1.2?ease(t/1.2):t<2.4?1:1-ease((t-2.4)/1.6);return {left:62+(end-62)*p,blocked:fitState==='blocked',enters:end<47};}
 
-export const ACTUATOR_VIEW={width:384,height:197,rodStart:64,housingEnd:66,travel:13,maxWidth:340,loadSpace:96,loadWidth:84,gap:8};
-export function actuatorVisualBounds(width,phase){const a=ACTUATOR_VIEW,w=Math.min(Math.max(32,width-a.loadSpace),a.maxWidth),offset=-w*a.travel/100*(1-Math.max(0,Math.min(1,phase)));return {frameWidth:w,frameHeight:w*a.height/a.width,bodyRight:w*a.housingEnd/100,rodRight:w+offset,eyeLeft:w*.8+offset,loadRight:w+a.gap+a.loadWidth+offset};}
+export const ACTUATOR_VIEW={width:384,height:197,rodStart:70,housingEnd:70.7,travel:7,travelY:3,maxWidth:340,loadSpace:96,loadWidth:84,gap:8};
+export function actuatorVisualBounds(width,phase){const a=ACTUATOR_VIEW,w=Math.min(Math.max(32,width-a.loadSpace),a.maxWidth),offset=-w*a.travel/100*(1-Math.max(0,Math.min(1,phase)));return {frameWidth:w,frameHeight:w*a.height/a.width,offsetY:-w*a.height/a.width*a.travelY/100*(1-Math.max(0,Math.min(1,phase))),bodyRight:w*a.housingEnd/100,rodRight:w+offset,eyeLeft:w*.8+offset,loadRight:w+a.gap+a.loadWidth+offset};}
