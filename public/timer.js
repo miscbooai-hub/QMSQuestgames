@@ -1,0 +1,1 @@
+export function timerState(ms){if(!Number.isFinite(ms))throw Error('Invalid timer value');const seconds=Math.ceil(Math.max(0,ms)/1000);return {display:`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`,urgent:ms>0&&ms<30000,expired:ms<=0};}

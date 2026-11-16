@@ -1,0 +1,3 @@
+export {assemblyModel} from './assembly-model.js';
+import {illustratedScene} from './illustrated-scenes.js';
+export function missionScene(m,answers,{scanned=false,intro=false,changeOpened=false,draft=null,previousAnswers=null,focusTask=0,showQuestion=true,trialOrientation='mirrored'}={}){if(!scanned&&!intro)return '<div class="process-sealed"><b>Scenario preview</b><p>Start the questions to inspect this situation.</p></div>';return '<section class="mission-illustrated">'+illustratedScene({kind:m.kind,batchId:m.batchId||'a',answers,changeOpened,draft,previousAnswers,focusTask,showQuestion,trialOrientation,changed:!!previousAnswers&&previousAnswers.some((v,i)=>v!==answers[i])},m.evidence)+'</section>';}

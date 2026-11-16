@@ -1,0 +1,14 @@
+{
+  "name": "qms-quest",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node backend/serve.mjs",
+    "dev": "node backend/serve.mjs --host 0.0.0.0",
+    "build": "node backend/build.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

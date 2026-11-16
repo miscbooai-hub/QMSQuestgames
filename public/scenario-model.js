@@ -1,0 +1,21 @@
+import {sceneModel} from './scene3d-model.js';
+export const products={a:{name:'Flight-control sensor',sprite:'assets/missions/sensor-v3.png'},b:{name:'Rescue robot',sprite:'assets/missions/robot-v3.png'},c:{name:'Inspection camera',sprite:'assets/missions/camera-v3.png'}};
+const flightProduct={name:'Flight actuator',sprite:'assets/missions/actuator-v4.png'};for(const id of ['d','e','f'])products[id]=flightProduct;
+const conditions={a:['−20°C','60°C'],b:['Rain','Darkness'],c:['Reflective surface','Dark surface']};
+export function questionScenario(spec){
+ const m=spec.mission?spec:sceneModel(spec),batch=m.batchId||'a',mission=m.mission;
+ const requested=Number.isInteger(spec.focusTask)?spec.focusTask:0;
+ if(requested<0||requested>=mission.tasks.length)throw Error('Unknown scenario question');
+ const task=mission.change&&!spec.changeOpened&&requested>=mission.change.after?mission.change.after-1:requested;
+ const choice=mission.tasks[task].options.find(o=>o.id===m.answers[task]);
+ const result={kind:m.kind,batch,task,question:mission.tasks[task].label,evidence:mission.evidence,choice:choice?.label||null,explanation:choice?.why||null,strong:m.decisions[task].strong,product:products[batch],change:spec.changeOpened?mission.change:null,answers:m.answers};
+ if(mission.tasks[task].rapid)return {...result,kind:'rapid',hazard:mission.tasks[task].hazard};
+ if(m.kind==='route')return {...result,verification:mission.tasks[0].options.find(o=>o.id===m.answers[0])?.label||null,conditions:conditions[batch]||conditions.a,actuator:['d','e','f'].includes(batch),stroke:'Push and pull through the full distance',load:'Work against a resisting force',covered:m.answers[0]==='range',configuration:m.answers[1]==='baseline'?'R3 + S2':m.answers[1]==='old'?'R2 + S1':m.answers[1]==='latest'?'Unrecorded versions':'R3 + S2 required',ready:m.answers[0]==='range'&&m.answers[1]==='baseline'&&m.answers[2]==='verify'};
+ if(m.kind==='sort'){const lot=m.lots[task];return {...result,lot,records:[{title:batch==='c'?'Batch / serial identity':'Lot identity',value:lot.item,ok:task===0?true:null},{title:'Inspection',value:task===0?'Accepted':'Status not stated in this evidence',ok:task===0?true:null},{title:batch==='c'?'Calibration record':batch==='b'?'Shipping / safety record':'Required certificate',value:task===1?'Belongs to another '+(batch==='c'?'serial batch':'lot'):task===0?'Matching record':'Additional evidence required',ok:task===0?true:task===1?false:null},{title:batch==='b'?'Required load test':batch==='c'?'Required stability test':'Mandatory test',value:task===2?'Pending':task===0?'Release conditions satisfied':'No test status provided',ok:task===0?true:task===2?false:null}],route:lot.route,disposition:lot.disposition};}
+ if(m.kind==='assembly')return {...result,assembly:m.assembly,component:['c','d','e','f'].includes(batch)?'Actuator locating bracket':'Connector',sprite:['c','d','e','f'].includes(batch)?'assets/missions/fixture-v3.png':'assets/missions/connector-v2.png',orientation:spec.trialOrientation==='normal'?'normal':'mirrored',fitState:assemblyFit(m.assembly,spec.trialOrientation==='normal'?'normal':'mirrored'),tools:m.assembly.standard?[1,1,1,1]:[1,2,3,4]};
+ if(m.kind==='investigate')return {...result,unitLabel:['d','e','f'].includes(batch)?'actuator returns':batch==='a'?'field failures':batch==='b'?'stopped robots':'false accepts',lot:'L7',firmware:'F2',contained:m.answers[0]==='contain',causeSupported:m.answers[1]==='integrity',correction:m.answers[2]==='check',effective:m.answers[1]==='integrity'&&m.answers[2]==='check'};
+ return {...result,budget:m.budget,gates:['Capacity','Operator training','Supplier / validation readiness'].map((name,i)=>({name,tokens:m.budget[i],funded:m.budget[i]>=2})),launch:m.answers[1],ready:m.budget.every(n=>n>=2)&&m.answers[1]==='gate'};
+}
+
+export function assemblyFit(assembly,orientation='mirrored'){if(orientation==='normal')return 'fits';return assembly.keyed?'blocked':assembly.forced?'force-risk':'wrong-fit';}
+export function assemblyFitPose(seconds,fitState){const end=['blocked','force-risk'].includes(fitState)?48:12,t=Math.max(0,seconds)%4,ease=x=>x*x*(3-2*x),p=t<1.2?ease(t/1.2):t<2.4?1:1-ease((t-2.4)/1.6);return {left:62+(end-62)*p,blocked:fitState==='blocked',enters:end<47};}

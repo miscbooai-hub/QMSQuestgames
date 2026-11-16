@@ -1,0 +1,9 @@
+import {scenarioScene} from './scenario-scenes.js';
+import {escape} from './text.js';
+import {sceneModel} from './scene3d-model.js';
+
+export const missionArtwork={route:'assets/missions/design-v2.jpg',sort:'assets/missions/supplier-v2.jpg',assembly:'assets/missions/assembly-v2.jpg',investigate:'assets/missions/recovery-v2.jpg',allocate:'assets/missions/growth-v2.jpg'};
+const locations={route:[[20,59],[50,59],[82,56]],investigate:[[19,59],[50,60],[81,54]],allocate:[[23,71],[50,73],[78,71]]};
+const titles={route:['Requirement','Controlled design','Verification'],investigate:['Affected units','Supported cause','Effectiveness'],allocate:['Capacity','Training','Readiness']};
+export function illustratedModel(spec){const m=sceneModel(spec);if(!missionArtwork[m.kind])throw Error('Unknown illustrated mission');const previous=spec.previousAnswers?sceneModel({...spec,answers:spec.previousAnswers}):null;return {...m,art:missionArtwork[m.kind],cargo:m.lots.map((lot,i)=>{const z={inspection:[36+i*5,60+i*3],release:[80+i*3,29+i*2],quarantine:[80+i*3,47+i*2],testing:[78+i*3,68+i*2]}[lot.route];const old=previous?.lots[i],from=old?{inspection:[36+i*5,60+i*3],release:[80+i*3,29+i*2],quarantine:[80+i*3,47+i*2],testing:[78+i*3,68+i*2]}[old.route]:[36+i*5,60+i*3];return {...lot,from,to:z,moving:lot.confirmed&&(!old||old.route!==lot.route)};}),stations:(locations[m.kind]||[]).map(([x,y],i)=>({x,y,label:titles[m.kind][i],strong:m.kind==='allocate'?m.budget[i]>=2:m.decisions[i]?.strong,selected:m.kind==='allocate'?m.budget[i]>0:m.decisions[i]?.selected,value:m.kind==='allocate'?m.budget[i]:null}))};}
+export function illustratedScene(spec,label){const m=illustratedModel(spec);return '<div class="illustrated-scene scenario-view scene-'+m.kind+'" data-illustrated-scene="'+m.kind+'"><img class="mission-art" src="'+m.art+'" width="1536" height="1024" alt="" decoding="async">'+scenarioScene(m)+'</div>';}
