@@ -13,7 +13,7 @@ export function createStore(c,fetcher=fetch,sleep=ms=>new Promise(r=>setTimeout(
  async function read(path){const res=await request(`/contents/${path}?ref=${encodeURIComponent(c.branch)}`);if(res.status===404)return null;if(!res.ok)throw Error('GitHub read unavailable; retry later');const file=await res.json();return JSON.parse(Buffer.from(file.content,'base64').toString('utf8'));}
  async function register(body){
   const teamName=String(body?.teamName||'').normalize('NFKC').trim().replace(/\s+/g,' '),key=teamName.toLocaleLowerCase('en-US');
-  if(!teamName||teamName.length>40||/[\u0000-\u001f\u007f]/.test(teamName)||!/^[-a-f0-9]{36}$/.test(body?.attemptId||'')||!/^[-a-f0-9]{72}$/.test(body?.registrationToken||''))throw Error('Enter a team name of 1–40 characters');
+  if(!teamName||teamName.length>40||/[\u0000-\u001f\u007f]/.test(teamName)||!/^[-a-f0-9]{36}$/.test(body?.attemptId||'')||!/^[-a-f0-9]{72}$/.test(body?.registrationToken||''))throw Object.assign(Error('Enter a team name of 1–40 characters'),{status:400});
   const teamId='QMS-'+createHash('sha256').update(key).digest('hex').slice(0,16).toUpperCase(),path=`registrations/${c.event}/${teamId}.json`,tokenHash=createHash('sha256').update(body.registrationToken).digest('hex');
   const registration={teamId,teamName,nameKey:key,attemptId:body.attemptId,tokenHash,batchId:c.batchId};
   const same=old=>{if(old.nameKey!==key||old.attemptId!==body.attemptId||old.tokenHash!==tokenHash){const e=Error('That team name is already registered. Choose a different name.');e.status=409;throw e;}return {teamId,teamName:old.teamName,batchId:old.batchId};};
@@ -21,6 +21,7 @@ export function createStore(c,fetcher=fetch,sleep=ms=>new Promise(r=>setTimeout(
    const old=await read(path);if(old)return same(old);
    let res;try{res=await request(`/contents/${path}`,{method:'PUT',body:JSON.stringify({message:`Register ${c.event} ${teamId}`,branch:c.branch,content:Buffer.from(JSON.stringify(registration)).toString('base64')})});}catch{const saved=await read(path);if(saved)return same(saved);}
    if(res?.ok)return same(registration);
+   if(res&&[401,403,404].includes(res.status)){const hint=res.status===401?'GitHub token is invalid or expired.':res.status===403?'GitHub denied registration storage. Check token Contents read/write permission, repository access and provider limits.':'Results repository or branch was not found. Check RESULTS_REPO, RESULTS_BRANCH and token repository access.';throw Object.assign(Error(hint+' Your team has not started; ask the organiser to check Vercel settings and redeploy.'),{status:503});}
    const saved=await read(path);if(saved)return same(saved);
    if(res&&![409,422,429,403,500,502,503,504].includes(res.status))throw Error('Team registration storage unavailable');
    const delay=Number(res?.headers?.get('retry-after')||0)*1000;if(delay>3000)throw Error('Registration rate limited; retry shortly');
