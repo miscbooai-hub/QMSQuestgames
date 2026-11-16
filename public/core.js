@@ -1,6 +1,7 @@
+import {everydayBatch,everydayMission} from './everyday-bank.js';
 import {batches as legacyBatches,stories,changes} from './batches.js';
 import {flightBatches,flightMission} from './flight-bank.js';
-export const batches=[...legacyBatches,...flightBatches];
+export const batches=[...legacyBatches,...flightBatches,everydayBatch];
 
 export const VERSION='qms-1';
 export const option=(id,label,points,why)=>({id,label,points,why});
@@ -25,7 +26,7 @@ export const missions=[
  {label:'Allocate the six investment tokens',allocation:true,options:Array.from({length:7},(_,a)=>Array.from({length:7-a},(_,b)=>{const c=6-a-b;return option([a,b,c].join('-'),[a,b,c].join(' / '),20*(Math.min(a,2)+Math.min(b,2)+Math.min(c,2)),a===2&&b===2?'Every stated prerequisite is funded.':'Readiness is limited by the underfunded areas. Extra investment in one area does not close another area’s gap.');})).flat()},
  {label:'Commit to the surge',options:[option('go','Launch without checking readiness',0,'An investment is not proof of readiness.'),option('gate','Verify all readiness gates, then scale',80,'Growth follows verified capacity, capability and controls.'),option('freeze','Cancel all growth permanently',10,'Avoiding all growth is not a sustainable response to manageable risks.')]}]}
 ];
-export function getMissions(batchId='a'){if(!batches.some(b=>b.id===batchId))throw Error('Unknown question batch');return missions.map((m,i)=>{const copy=structuredClone(m),story=stories[batchId]?.[i];if(story){copy.evidence=story[0];copy.tasks=copy.tasks.map((t,j)=>{const row=story[j+1];if(!row)return t;return {...t,label:row[0],options:t.options.map((o,k)=>({...o,label:row[1][k],why:row[2][k]}))};});}if(['d','e','f'].includes(batchId))flightMission(copy,i,batchId);copy.change=changes[batchId]?.[i]||copy.change;copy.batchId=batchId;return copy;});}
+export function getMissions(batchId='a'){if(!batches.some(b=>b.id===batchId))throw Error('Unknown question batch');return missions.map((m,i)=>{const copy=structuredClone(m),story=stories[batchId]?.[i];if(story){copy.evidence=story[0];copy.tasks=copy.tasks.map((t,j)=>{const row=story[j+1];if(!row)return t;return {...t,label:row[0],options:t.options.map((o,k)=>({...o,label:row[1][k],why:row[2][k]}))};});}if(['d','e','f','g'].includes(batchId))flightMission(copy,i,batchId==='g'?'d':batchId);if(batchId==='g')everydayMission(copy,i);copy.change=changes[batchId]?.[i]||copy.change;copy.batchId=batchId;return copy;});}
 export function acknowledgeChange(state,now=Date.now()){const m=getMissions(state.batchId)[state.run.length];if(state.stage!=='play'||!m.change||!remaining(state.active.deadline,now)||state.active.answers.slice(0,m.change.after).some(a=>a===null))throw Error('Change not available');return {...state,active:{...state.active,changeOpened:true,sceneTask:m.change.after}};}
 export function award(index,score){return score===200?['Blueprint Guardian','Supply Sentinel','Assembly Architect','Root Cause Detective','Growth Strategist'][index]:score>=100?'Island Restorer':'Learning Explorer';}
 export function scoreMission(index,answers,batchId='a'){const m=getMissions(batchId)[index];if(!m||!Array.isArray(answers)||answers.length!==m.tasks.length)throw Error('Invalid mission answers');return m.tasks.reduce((sum,t,i)=>{if(answers[i]===null)return sum;const o=t.options.find(o=>o.id===answers[i]);if(!o)throw Error('Unknown decision');return sum+o.points;},0);}
