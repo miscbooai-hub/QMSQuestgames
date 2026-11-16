@@ -6,6 +6,6 @@ Preview: npm run dev (or node backend/serve.mjs). Node.js 22 or newer, no packag
 
 All current game questions, art, mini-games, aircraft/tree mapping and organiser pages are included. Shared official scoring still requires the existing server environment settings; uploading files does not connect it automatically. No secrets or results are included.
 
-This is the runtime package. Development tests, audit-generation scripts, full documentation and artwork provenance remain in the QMS source and full Github/github1 copies. Its package scripts intentionally expose only preview/start/build.
+This is the runtime package. Development tests, audit-generation scripts, full documentation and artwork provenance remain in the QMS source and archived development copies. Its package scripts intentionally expose only preview/start/build.
 
 To refresh from the original QMS folder: node backend/prepare-upload.mjs --refresh-browser. Independently edited or unexpected files are preserved and cause refresh to stop. No GitHub upload is performed by that command.
