@@ -1,6 +1,6 @@
 # QMS Quest — browser upload package
 
-Drag ALL contents of this folder into the repository ROOT. Keep public/, api/ and backend/ as folders. Do not upload the outer GitHub-Upload directory or a ZIP. This package contains fewer than 100 files; preparation stops if it reaches that limit.
+Drag ALL contents of this folder into the repository ROOT. Keep public/, api/ and backend/ as folders. Do not upload the outer GitHub1 game directory or a ZIP. This package contains fewer than 100 files; preparation stops if it reaches that limit.
 
 Preview: npm run dev (or node backend/serve.mjs). Node.js 22 or newer, no package dependencies. Build: npm run build (or node backend/build.mjs), output dist. Vercel: Other framework; the api/ functions stay at repository root.
 
