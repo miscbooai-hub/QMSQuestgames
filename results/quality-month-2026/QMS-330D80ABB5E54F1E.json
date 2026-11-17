@@ -1,0 +1,60 @@
+{
+  "version": "qms-1",
+  "batchId": "d",
+  "teamId": "QMS-330D80ABB5E54F1E",
+  "teamName": "ITAppsGangsters",
+  "attemptId": "001a3222-1d5b-448f-bc95-eb2e400cc0ed",
+  "run": [
+    {
+      "answers": [
+        "range",
+        "baseline",
+        "verify"
+      ],
+      "elapsedMs": 99023,
+      "score": 200
+    },
+    {
+      "answers": [
+        "release",
+        "contain",
+        "verify"
+      ],
+      "elapsedMs": 55068,
+      "score": 200
+    },
+    {
+      "answers": [
+        "key",
+        "standard",
+        "pilot"
+      ],
+      "elapsedMs": 95870,
+      "score": 200
+    },
+    {
+      "answers": [
+        "contain",
+        "integrity",
+        "check",
+        "r0-0",
+        "r1-control",
+        "r2-1",
+        "r3-1"
+      ],
+      "elapsedMs": 78712,
+      "score": 140
+    },
+    {
+      "answers": [
+        "2-2-2",
+        "gate"
+      ],
+      "elapsedMs": 48682,
+      "score": 200
+    }
+  ],
+  "score": 940,
+  "elapsedMs": 377355,
+  "receivedAt": "2026-11-17T09:44:02.079Z"
+}
