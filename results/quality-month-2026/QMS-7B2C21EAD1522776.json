@@ -1,0 +1,60 @@
+{
+  "version": "qms-1",
+  "batchId": "d",
+  "teamId": "QMS-7B2C21EAD1522776",
+  "teamName": "817",
+  "attemptId": "593f8f0b-b3c4-45a4-918f-e53e33525fc6",
+  "run": [
+    {
+      "answers": [
+        "range",
+        "baseline",
+        "verify"
+      ],
+      "elapsedMs": 66377,
+      "score": 200
+    },
+    {
+      "answers": [
+        "release",
+        "contain",
+        "verify"
+      ],
+      "elapsedMs": 56600,
+      "score": 200
+    },
+    {
+      "answers": [
+        "key",
+        "standard",
+        "pilot"
+      ],
+      "elapsedMs": 65834,
+      "score": 200
+    },
+    {
+      "answers": [
+        "contain",
+        "integrity",
+        "check",
+        "r0-0",
+        "r1-control",
+        "r2-control",
+        "r3-1"
+      ],
+      "elapsedMs": 114481,
+      "score": 160
+    },
+    {
+      "answers": [
+        "2-2-2",
+        "gate"
+      ],
+      "elapsedMs": 52577,
+      "score": 200
+    }
+  ],
+  "score": 960,
+  "elapsedMs": 355869,
+  "receivedAt": "2026-11-17T09:45:02.018Z"
+}
