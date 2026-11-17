@@ -1,0 +1,60 @@
+{
+  "version": "qms-1",
+  "batchId": "d",
+  "teamId": "QMS-D348F4779CC81817",
+  "teamName": "Losers XI",
+  "attemptId": "f005b65a-0c0e-41ad-9275-04ad659fe420",
+  "run": [
+    {
+      "answers": [
+        "range",
+        "baseline",
+        "verify"
+      ],
+      "elapsedMs": 72623,
+      "score": 200
+    },
+    {
+      "answers": [
+        "release",
+        "contain",
+        "verify"
+      ],
+      "elapsedMs": 47290,
+      "score": 200
+    },
+    {
+      "answers": [
+        "key",
+        "standard",
+        "pilot"
+      ],
+      "elapsedMs": 87989,
+      "score": 200
+    },
+    {
+      "answers": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "elapsedMs": 120000,
+      "score": 0
+    },
+    {
+      "answers": [
+        "2-2-2",
+        "gate"
+      ],
+      "elapsedMs": 42834,
+      "score": 200
+    }
+  ],
+  "score": 800,
+  "elapsedMs": 370736,
+  "receivedAt": "2026-11-17T10:11:20.353Z"
+}
