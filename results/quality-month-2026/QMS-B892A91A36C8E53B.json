@@ -1,0 +1,60 @@
+{
+  "version": "qms-1",
+  "batchId": "d",
+  "teamId": "QMS-B892A91A36C8E53B",
+  "teamName": "ASC Captains",
+  "attemptId": "9b42c0f9-edfe-49bb-a6f5-f336ef0635d1",
+  "run": [
+    {
+      "answers": [
+        "range",
+        "baseline",
+        "verify"
+      ],
+      "elapsedMs": 41183,
+      "score": 200
+    },
+    {
+      "answers": [
+        "release",
+        "contain",
+        "verify"
+      ],
+      "elapsedMs": 36096,
+      "score": 200
+    },
+    {
+      "answers": [
+        "key",
+        "standard",
+        "pilot"
+      ],
+      "elapsedMs": 33768,
+      "score": 200
+    },
+    {
+      "answers": [
+        "contain",
+        "integrity",
+        "check",
+        "r0-control",
+        "r1-control",
+        "r2-control",
+        "r3-control"
+      ],
+      "elapsedMs": 57848,
+      "score": 200
+    },
+    {
+      "answers": [
+        "2-2-2",
+        "gate"
+      ],
+      "elapsedMs": 31160,
+      "score": 200
+    }
+  ],
+  "score": 1000,
+  "elapsedMs": 200055,
+  "receivedAt": "2026-11-17T10:57:55.007Z"
+}
